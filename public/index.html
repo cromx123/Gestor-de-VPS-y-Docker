@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Gestor VPS</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>Gestor VPS</strong>
+      <span id="system" class="muted"></span>
+    </div>
+    <div class="topbar-right">
+      <span id="updated" class="muted small" aria-live="polite"></span>
+      <button id="logout" class="btn btn-ghost" type="button">Salir</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <p id="error" class="banner" role="alert" hidden></p>
+
+    <section class="cards" aria-label="Recursos del servidor">
+      <article class="card">
+        <header class="card-head"><h2>CPU</h2><span id="cpu-value" class="big">—</span></header>
+        <div class="bar"><span id="cpu-bar"></span></div>
+        <p id="cpu-sub" class="muted small">&nbsp;</p>
+        <div id="cpu-spark" class="spark"></div>
+      </article>
+
+      <article class="card">
+        <header class="card-head"><h2>RAM</h2><span id="mem-value" class="big">—</span></header>
+        <div class="bar"><span id="mem-bar"></span></div>
+        <p id="mem-sub" class="muted small">&nbsp;</p>
+        <div id="mem-spark" class="spark"></div>
+      </article>
+
+      <article class="card">
+        <header class="card-head"><h2>Disco</h2><span id="disk-value" class="big">—</span></header>
+        <div class="bar"><span id="disk-bar"></span></div>
+        <p id="disk-sub" class="muted small">&nbsp;</p>
+        <dl class="facts">
+          <dt>Swap</dt><dd id="swap">—</dd>
+          <dt>Encendido</dt><dd id="uptime">—</dd>
+          <dt>Docker</dt><dd id="docker-version">—</dd>
+        </dl>
+      </article>
+
+      <article class="card">
+        <header class="card-head"><h2>Red</h2><span id="net-value" class="big small-big">—</span></header>
+        <p id="net-sub" class="muted small">&nbsp;</p>
+        <div id="net-spark" class="spark"></div>
+        <p class="legend small"><span class="key key-rx"></span>Bajada <span class="key key-tx"></span>Subida</p>
+      </article>
+    </section>
+    <p id="history-span" class="muted small history-span"></p>
+
+    <section class="panel" aria-labelledby="containers-title">
+      <div class="panel-head">
+        <h2 id="containers-title">Contenedores <span id="counts" class="muted"></span></h2>
+        <div class="tools">
+          <input id="filter" type="search" placeholder="Buscar nombre, imagen…" aria-label="Buscar contenedor">
+          <select id="project" aria-label="Proyecto"><option value="">Todos los proyectos</option></select>
+          <select id="state" aria-label="Estado">
+            <option value="">Todos</option>
+            <option value="running">Activos</option>
+            <option value="stopped">Detenidos</option>
+            <option value="problems">Con problemas</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="containers">
+          <thead>
+            <tr>
+              <th><button type="button" data-sort="name">Nombre</button></th>
+              <th><button type="button" data-sort="state">Estado</button></th>
+              <th class="num"><button type="button" data-sort="cpu" title="% del total de la VPS">CPU</button></th>
+              <th class="num"><button type="button" data-sort="mem">RAM</button></th>
+              <th>Imagen</th>
+              <th><span class="sr-only">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            <tr><td colspan="6" class="empty">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="confirm" class="dialog">
+    <h3 id="confirm-title"></h3>
+    <p id="confirm-text" class="muted"></p>
+    <div class="dialog-actions">
+      <button id="confirm-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+      <button id="confirm-ok" class="btn" type="button">Confirmar</button>
+    </div>
+  </dialog>
+
+  <dialog id="logs" class="dialog dialog-wide">
+    <div class="dialog-head">
+      <h3>Logs · <span id="logs-name"></span></h3>
+      <div class="tools">
+        <label class="small">Líneas
+          <select id="logs-tail">
+            <option>100</option>
+            <option selected>300</option>
+            <option>1000</option>
+            <option>3000</option>
+          </select>
+        </label>
+        <label class="check small"><input id="logs-follow" type="checkbox"> Seguir</label>
+        <button id="logs-refresh" class="btn" type="button">Actualizar</button>
+        <button id="logs-close" class="btn btn-ghost" type="button">Cerrar</button>
+      </div>
+    </div>
+    <pre id="logs-text" tabindex="0"></pre>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
